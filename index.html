@@ -87,21 +87,94 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "fd7183ee83b44668bd85db0189717963"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
-      e.preventDefault();
-      let output = document.querySelector('output');
-      let firstNum = document.querySelector('#first-num').value;
-      let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+        e.preventDefault();
+        let output = document.querySelector('output');
+        let firstNum = document.querySelector('#first-num').value;
+        let secondNum = document.querySelector('#second-num').value;
+        let operator = document.querySelector('#operator').value;
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
-    // You may move this JS to another file if you wish
+    errorBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          switch (btn.textContent) {
+            case 'Console Log':
+              console.log('You used', operator.value);
+              break;
+            case 'Console Error':
+              console.error('Error: I don\'t like the number ', document.querySelector('#first-num').value);
+              break;
+            case 'Console Count':
+              console.count('Times clicked');
+              break;
+            case 'Console Warn':
+              console.warn('Warning: Don\'t click me');
+              break;
+            case 'Console Assert':
+              console.assert(false, 'Assertion failed');
+              break;
+            case 'Console Clear':
+              console.clear();
+              break;
+            case 'Console Dir':
+              console.dir(document.body);
+              break;
+            case 'Console dirxml':
+              console.dirxml(document.body);
+              break;
+            case 'Console Group Start':
+              console.group('Group');
+              console.log('Your first number is', document.querySelector('#first-num').value);
+              console.log('Your second number is', document.querySelector('#second-num').value);
+              break;
+            case 'Console Group End':
+              console.log('Ending Grouping');
+              console.groupEnd();
+              break;
+            case 'Console Table':
+              console.table([{ firstNumber: document.querySelector('#first-num').value, secondNumber: document.querySelector('#second-num').value },]);
+              break;
+            case 'Start Timer':
+              console.time('Timer');
+              break;
+            case 'End Timer':
+              console.timeEnd('Timer');
+              break;
+            case 'Console Trace':
+              console.trace();
+              break;
+            case 'Trigger a Global Error':
+              try{
+                throw new ValidationError();
+              } catch(error){
+                alert("uh oh");
+                console.error(error);
+              }
+              break;
+          }
+        });
+      });
+
+      class ValidationError extends Error {
+        constructor(message) {
+          super(message);
+          this.name = "You shouldn't have clicked me";
+        }
+      }
   </script>
 </body>
 
